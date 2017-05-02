@@ -93,6 +93,10 @@ func main() {
 			os.Exit(0)
 		}
 
+		// force override
+		c.Set("stream","true")
+		c.Set("tee","true")
+
 		configPath, exists := getConfigPath()
 		if !exists {
 			exitErr(fmt.Errorf("missing config file at %s\nuse --configure to create", configPath))
