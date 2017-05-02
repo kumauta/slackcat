@@ -2,10 +2,13 @@
 *.o
 *.a
 *.so
+slackcat_darwin
+slackcat_linux
 
 # Folders
 _obj
 _test
+.idea
 
 # Architecture specific extensions/prefixes
 *.[568vq]
