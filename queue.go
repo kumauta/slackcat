@@ -32,11 +32,15 @@ func (q *StreamQ) Add(line string) {
 func (q *StreamQ) Flush() []string {
 	q.lock.Lock()
 	defer q.lock.Unlock()
-	q.unAckd = append(q.unAckd, "```")
+	if q.Len() > 1 {
+		q.unAckd = append(q.unAckd, "```")
+	}
 	for _, l := range q.lines {
 		q.unAckd = append(q.unAckd, l)
 	}
-	q.unAckd = append(q.unAckd, "```")
+	if q.Len() > 2 {
+		q.unAckd = append(q.unAckd, "```")
+	}
 	q.lines = []string{}
 	return q.unAckd
 }
