@@ -2,6 +2,7 @@ package main
 
 import (
 	"sync"
+	"regexp"
 )
 
 //Streaming message queue
@@ -35,8 +36,10 @@ func (q *StreamQ) Flush() []string {
 	if q.Len() > 1 {
 		q.unAckd = append(q.unAckd, "```")
 	}
+
+	rep := regexp.MustCompile(`(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]`)
 	for _, l := range q.lines {
-		q.unAckd = append(q.unAckd, l)
+		q.unAckd = append(q.unAckd, rep.ReplaceAllString(l, ""))
 	}
 	if q.Len() > 2 {
 		q.unAckd = append(q.unAckd, "```")
