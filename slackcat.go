@@ -102,7 +102,25 @@ func (sc *Slackcat) processStreamQ() {
 		if noop {
 			output(fmt.Sprintf("skipped posting of %s message lines to %s", strconv.Itoa(len(msglines)), sc.channelName))
 		} else {
-			sc.postMsg(msglines)
+			cnt := 1
+			bs := []string{"```"}
+			postMsg := []string{}
+			for i := 0; i < len(msglines); i++ {
+
+				postMsg = append(postMsg,msglines[i:i+1]...)
+				if 30 == len(postMsg) {
+					tmp := append(bs, postMsg[0:30]...)
+					tmp = append(tmp, bs...)
+					sc.postMsg(tmp)
+					postMsg = []string{}
+				}else if cnt == len(msglines) {
+					tmp := append(bs, postMsg[0:len(postMsg)]...)
+					tmp = append(tmp, bs...)
+					sc.postMsg(tmp)
+					postMsg = []string{}
+				}
+				cnt ++
+			}
 		}
 		sc.queue.Ack()
 	}
